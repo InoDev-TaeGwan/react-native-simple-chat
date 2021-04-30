@@ -9,7 +9,7 @@ const Container = styled.View`
   justify-content: center;
   align-items: center;
   background-color: ${({ theme }) => theme.background};
-  padding: 0 20px;
+  padding: 40px 20px;
 `;
 
 const ErrorText = styled.Text`
@@ -57,7 +57,6 @@ const SignUp = () => {
 
   return (
     <KeyboardAwareScrollView
-      contentContainerStyle={{ flex: 1 }}
       extraScrollHeight={20} // 원하는 위치로 스크롤되도록 설정
     >
       <Container>
