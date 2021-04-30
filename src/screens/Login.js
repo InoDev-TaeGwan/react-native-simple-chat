@@ -4,6 +4,7 @@ import { Button } from "react-native";
 import { Image, Input } from "../components";
 import { images } from "../utils/images";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+import { removeWhitespace, validateEmail } from "../utils/common";
 
 const Container = styled.View`
   flex: 1;
@@ -13,10 +14,20 @@ const Container = styled.View`
   padding: 20px;
 `;
 
+const ErrorText = styled.Text`
+  align-items: flex-start;
+  width: 100%;
+  height: 20px;
+  margin-bottom: 10px;
+  line-height: 20px;
+  color: ${({ theme }) => theme.errorText};
+`;
+
 const Login = ({ navigation }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const passwordRef = useRef();
+  const [errorMessage, setErrorMessage] = useState("");
   /*
    * useRef 를 이용해 이메일을 입력받는 Input 컴포넌트에서 키보드의 next 버튼을 클릭하면 비밀번호를 입력하는 Input 컴포넌트로 포커스가 이동
    * 이메일을 입력하는 Input 컴포넌트의 onSubmitEditing 함수를 passwordRef 를 이용해서 비밀번호를 입력하는 Input 컴포넌트로 포커스가 이동하도록 함.
@@ -38,6 +49,25 @@ const Login = ({ navigation }) => {
    * react-native-keyboard-aware-scroll-view 라이브러리는 포커스가 있는 TextInput 컴포넌트의 위치로 자동 스크롤되는 기능 등 Input 컴포넌트에 필요한 기능등을 제공한다.
    *
    */
+
+  const _handleEmailChange = (email) => {
+    const changeEmail = removeWhitespace(email);
+    setEmail(changeEmail);
+    setErrorMessage(
+      validateEmail(changeEmail) ? "" : "Please verify your email."
+    );
+  };
+
+  const _handlePasswordChange = (password) => {
+    setPassword(removeWhitespace(password));
+  };
+
+  /*
+   * 이메일에는 공백이 존재하지 않으므로 email 의 값이 변경될 때마다 공백을 제거하도록 수정하고, validateEmail 함수를 이용해 공백이 제거된 이메일이 올바른 형식인지 검사
+   * 검사 결과에 따라 오류 메시지가 나타나도록 로그인 화면을 수정
+   * 비밀번호도 공백을 허용하지 않기 위해 공백을 제거하는 코드가 추가
+   */
+
   return (
     <KeyboardAwareScrollView
       contentContainerStyle={{ flex: 1 }}
@@ -48,7 +78,7 @@ const Login = ({ navigation }) => {
         <Input
           label="Email"
           value={email}
-          onChangeText={(text) => setEmail(text)}
+          onChangeText={_handleEmailChange}
           onSubmitEditing={() => passwordRef.current.focus()}
           placeholder="Email"
           returnKeyType="next"
@@ -57,12 +87,13 @@ const Login = ({ navigation }) => {
           ref={passwordRef}
           label="Password"
           value={password}
-          onChangeText={(text) => setPassword(text)}
+          onChangeText={_handlePasswordChange}
           onSubmitEditing={() => {}}
           placeholder="Password"
           returnKeyType="done"
           isPassword
         />
+        <ErrorText>{errorMessage}</ErrorText>
         <Button title="Signup" onPress={() => navigation.navigate("Signup")} />
       </Container>
     </KeyboardAwareScrollView>
