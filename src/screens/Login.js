@@ -1,7 +1,6 @@
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import styled from "styled-components/native";
-import { Button } from "react-native";
-import { Image, Input } from "../components";
+import { Image, Input, Button } from "../components";
 import { images } from "../utils/images";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { removeWhitespace, validateEmail } from "../utils/common";
@@ -28,6 +27,7 @@ const Login = ({ navigation }) => {
   const [password, setPassword] = useState("");
   const passwordRef = useRef();
   const [errorMessage, setErrorMessage] = useState("");
+  const [disabled, setDisabled] = useState(true);
   /*
    * useRef 를 이용해 이메일을 입력받는 Input 컴포넌트에서 키보드의 next 버튼을 클릭하면 비밀번호를 입력하는 Input 컴포넌트로 포커스가 이동
    * 이메일을 입력하는 Input 컴포넌트의 onSubmitEditing 함수를 passwordRef 를 이용해서 비밀번호를 입력하는 Input 컴포넌트로 포커스가 이동하도록 함.
@@ -50,6 +50,11 @@ const Login = ({ navigation }) => {
    *
    */
 
+  useEffect(() => {
+    // 로그인 버튼은 이메일과 비밀번호가 입력되어 있고, 오류 메시지가 없는 상태에서만 활성화
+    setDisabled(!(email && password && !errorMessage));
+  }, [email, password, errorMessage]);
+
   const _handleEmailChange = (email) => {
     const changeEmail = removeWhitespace(email);
     setEmail(changeEmail);
@@ -61,6 +66,8 @@ const Login = ({ navigation }) => {
   const _handlePasswordChange = (password) => {
     setPassword(removeWhitespace(password));
   };
+
+  const _handleLoginButtonPress = () => {};
 
   /*
    * 이메일에는 공백이 존재하지 않으므로 email 의 값이 변경될 때마다 공백을 제거하도록 수정하고, validateEmail 함수를 이용해 공백이 제거된 이메일이 올바른 형식인지 검사
@@ -88,13 +95,22 @@ const Login = ({ navigation }) => {
           label="Password"
           value={password}
           onChangeText={_handlePasswordChange}
-          onSubmitEditing={() => {}}
+          onSubmitEditing={_handleLoginButtonPress}
           placeholder="Password"
           returnKeyType="done"
           isPassword
         />
         <ErrorText>{errorMessage}</ErrorText>
-        <Button title="Signup" onPress={() => navigation.navigate("Signup")} />
+        <Button
+          title="Login"
+          onPress={_handleLoginButtonPress}
+          disabled={disabled}
+        />
+        <Button
+          title="Sign up with email"
+          onPress={() => navigation.navigate("Signup")}
+          isFilled={false}
+        />
       </Container>
     </KeyboardAwareScrollView>
   );
