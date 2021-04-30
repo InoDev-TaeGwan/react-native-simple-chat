@@ -4,14 +4,26 @@ import { Image, Input, Button } from "../components";
 import { images } from "../utils/images";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { removeWhitespace, validateEmail } from "../utils/common";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 const Container = styled.View`
   flex: 1;
   justify-content: center;
   align-items: center;
   background-color: ${({ theme }) => theme.background};
-  padding: 20px;
+  padding: 0 20px;
+  padding-top: ${({ insets: { top } }) => top}px;
+  padding-top: ${({ insets: { bottom } }) => bottom}px;
 `;
+/*
+ * SafeAreaView 컴포넌트를 이용하는 방법 외에도 노치 디자인에 대응하기 위해 스타일을 설정해야 하는 padding 값을 얻는 방법이 있다.
+ * react-native-safe-area-context 라이브러리가 제공하는 useSafeAreaInsets Hook 함수를 이용하면 된다.
+ * 노치 디자인을 해결하기 위해 padding의 top 과 bottom 의 값을 useSafeAreaInsets 함수가 알려주는 값만큼 설정하고,
+ * 양 옆은 디자인에 맞게 20px 로 설정했다.
+ * useSafeAreaInsets 함수의 장점은 ios 뿐만 아니라 안드로이드에서도 적용 가능한 padding 값을 전달한다는 점이다.
+ *
+ * 이렇게 useSafeAreaInsets 를 사용하면 조금 더 세밀하게, 원하는 곳에 원하는 만큼 padding 을 설정해서 노치 디자인 문제를 해결할 수 있다는 장점이 있다.
+ */
 
 const ErrorText = styled.Text`
   align-items: flex-start;
@@ -23,6 +35,7 @@ const ErrorText = styled.Text`
 `;
 
 const Login = ({ navigation }) => {
+  const insets = useSafeAreaInsets();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const passwordRef = useRef();
@@ -80,7 +93,7 @@ const Login = ({ navigation }) => {
       contentContainerStyle={{ flex: 1 }}
       extraScrollHeight={20} // 원하는 위치로 스크롤되도록 설정
     >
-      <Container>
+      <Container insets={insets}>
         <Image url={images.logo} imageStyle={{ borderRadius: 8 }} />
         <Input
           label="Email"

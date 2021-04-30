@@ -18,10 +18,19 @@ const AuthStack = () => {
       screenoptions={{
         headerTitleAlign: "center",
         cardStyle: { backgroundColor: theme.backgroundColor },
+        headerTintColor: theme.headerTintColor,
       }}
     >
-      <Stack.Screen name="Login" component={Login} />
-      <Stack.Screen name="SignUp" component={SignUp} />
+      <Stack.Screen
+        name="Login"
+        component={Login}
+        options={{ headerShown: false }} // 로그인 화면에서는 헤더가 렌더링 되지않도록함
+      />
+      <Stack.Screen
+        name="Signup"
+        component={SignUp}
+        options={{ headerBackTitleVisible: false }}
+      />
     </Stack.Navigator>
   );
 };
