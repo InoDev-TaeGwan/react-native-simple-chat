@@ -37,7 +37,7 @@ const App = () => {
   const _loadAssets = async () => {
     const imageAssets = cacheImages([
       require("../assets/splash.png"),
-      ...Object.values(images),
+      ...Object.values(images), // 로고 이미지를 로딩 과정에서 미리 불러오도록 함.
     ]);
     const fontAssets = cacheFonts([]);
 
