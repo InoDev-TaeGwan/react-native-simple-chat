@@ -6,6 +6,7 @@ import AppLoading from "expo-app-loading";
 import { Asset } from "expo-asset";
 import * as Font from "expo-font";
 import Navigation from "./navigations";
+import { images } from "./utils/images";
 
 /*
  * 프로젝트에서 사용할 이미지와 폰트를 미리 불러와서 사용할 수 있도록 cacheImages 와 cacheFonts 함수를 작성하고 이를 이용해 _loadAssets 함수를 구성
@@ -34,7 +35,10 @@ const App = () => {
   const [isReady, setIsReady] = useState(false);
 
   const _loadAssets = async () => {
-    const imageAssets = cacheImages([require("../assets/splash.png")]);
+    const imageAssets = cacheImages([
+      require("../assets/splash.png"),
+      ...Object.values(images),
+    ]);
     const fontAssets = cacheFonts([]);
 
     await Promise.all([...imageAssets, ...fontAssets]);
