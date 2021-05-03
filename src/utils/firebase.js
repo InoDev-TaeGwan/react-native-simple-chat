@@ -64,3 +64,24 @@ export const login = async ({ email, password }) => {
   const { user } = await Auth.signInWithEmailAndPassword(email, password);
   return user;
 };
+
+// 로그아웃
+export const logout = async () => {
+  return await Auth.signOut();
+};
+
+// 현재 접속한 사용자의 정보를 반환
+export const getCurrentUser = () => {
+  const { uid, displayName, email, photoURL } = Auth.currentUser;
+  return { uid, name: displayName, email, photoUrl: photoURL };
+};
+
+// 사용자의 사진을 수정
+export const updateUserPhoto = async (photoUrl) => {
+  const user = Auth.currentUser;
+  const storageUrl = photoUrl.startsWith("https")
+    ? photoUrl
+    : await uploadImage(photoUrl);
+  await user.updateProfile({ photoURL: storageUrl });
+  return { name: user.displayName, email: user.email, photoUrl: user.photoURL };
+};
