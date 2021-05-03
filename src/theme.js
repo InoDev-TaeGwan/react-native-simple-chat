@@ -19,4 +19,6 @@ export const theme = {
   buttonTitle: colors.white,
   buttonUnfilledTitle: colors.blue,
   headerTintColor: colors.black,
+  imageButtonBackground: colors.gray_1,
+  imageButtonIcon: colors.white,
 };
