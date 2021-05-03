@@ -90,6 +90,7 @@ const Image = ({ url, imageStyle, rounded, showButton, onChangeImage }) => {
       if (!result.cancelled) {
         onChangeImage(result.uri);
       }
+      console.log("profileImage", result);
     } catch (e) {
       Alert.alert("Photo Error", e.message);
     }
