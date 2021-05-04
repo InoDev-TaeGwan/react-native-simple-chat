@@ -13,7 +13,7 @@ const ChannelList = ({ navigation }) => {
       <Text style={{ fontSize: 24 }}>Channel List</Text>
       <Button
         title="Channel Creation"
-        onPress={() => navigation.navigate("channel Creation")}
+        onPress={() => navigation.navigate("Channel Creation")}
       />
     </Container>
   );

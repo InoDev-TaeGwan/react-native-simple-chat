@@ -1,5 +1,6 @@
 import * as firebase from "firebase";
 import config from "../../firebase.json";
+import 'firebase/firestore';
 
 // 연동
 const app = firebase.initializeApp(config);
@@ -85,3 +86,21 @@ export const updateUserPhoto = async (photoUrl) => {
   await user.updateProfile({ photoURL: storageUrl });
   return { name: user.displayName, email: user.email, photoUrl: user.photoURL };
 };
+
+// 채널 데이터 베이스
+/*
+* 컬렉션에서 문서를 생성할 때 ID 를 지정하지 않으면 파이어스토어에서 자동으로 중복되지 않는 ID 를 생성해 문서의 ID 로 사용.
+* 자동으로 생성된 문서의 ID 는 문서의 필드로도 저장하고, 사용자에게 입력받은 채널의 제목과 설명을 필드로 사용
+* 마지막으로 채널이 생성된 시간을 함수가 호출된 시점의 타임스탬프로 저장하도록 작성
+*/
+export const DB = firebase.firestore();
+
+export const createChannel = async ({title, description}) => {
+  const newChannelRef = DB.collection('channels').doc();
+  const id = newChannelRef.id;
+  const newChannel = {
+    id, title, description,createAt:Date.now()
+  };
+  await newChannelRef.set(newChannel);
+  return id;
+}
