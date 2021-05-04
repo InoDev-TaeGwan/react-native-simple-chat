@@ -109,13 +109,13 @@ export const createChannel = async ({ title, description }) => {
 };
 
 // 메시지 생성, 메시지를 전송
-export const createMessage = async ({channelId,text }) => {
+export const createMessage = async ({ channelId, message }) => {
   return await DB.collection('channels')
       .doc(channelId)
       .collection('messages')
       .doc(message._id)
       .set({
         ...message,
-        createAt: Date.now()
-      })
-}
+        createdAt: Date.now(),
+      });
+};
