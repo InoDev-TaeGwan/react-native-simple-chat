@@ -50,11 +50,8 @@ const Image = ({ url, imageStyle, rounded, showButton, onChangeImage }) => {
   useEffect(() => {
     (async () => {
       try {
-        if (Platform.OS === "ios") {
-          const { status } = await Permissions.askAsync(
-            Permissions.CAMERA_ROLL
-            // Permissions.CAMERA
-          );
+        if (Platform.OS !== "web") {
+          const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync()
           if (status !== "granted") {
             Alert.alert(
               "Photo Permission",
