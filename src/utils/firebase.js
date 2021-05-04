@@ -95,12 +95,27 @@ export const updateUserPhoto = async (photoUrl) => {
 */
 export const DB = firebase.firestore();
 
-export const createChannel = async ({title, description}) => {
+export const createChannel = async ({ title, description }) => {
   const newChannelRef = DB.collection('channels').doc();
   const id = newChannelRef.id;
   const newChannel = {
-    id, title, description,createAt:Date.now()
+    id,
+    title,
+    description,
+    createdAt: Date.now(),
   };
   await newChannelRef.set(newChannel);
   return id;
+};
+
+// 메시지 생성, 메시지를 전송
+export const createMessage = async ({channelId,text }) => {
+  return await DB.collection('channels')
+      .doc(channelId)
+      .collection('messages')
+      .doc(message._id)
+      .set({
+        ...message,
+        createAt: Date.now()
+      })
 }
